@@ -8,16 +8,16 @@ class CustomUserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(CustomUserForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['class'] = ''
 
 class CustomLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(CustomLoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
-            'class': 'form-control',
+            'class': '',
             'placeholder': 'Username',
         })
         self.fields['password'].widget.attrs.update({
-            'class': 'form-control',
+            'class': '',
             'placeholder': 'Password',
         })

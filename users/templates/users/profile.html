@@ -11,7 +11,7 @@
             {% if request.user.info.image %}
             <img src="{{ request.user.info.image.url }}" alt="Profile Picture" class="profile-img rounded-circle mb-3">
             {% else %}
-            <img src="{% static 'default-profile.png' %}" alt="Default Picture" class="profile-img rounded-circle mb-3">
+            <img src="/media/profile_pics/pixlr-image-generator-example-4_Zu4xlJK.webp" alt="Default Picture" class="profile-img rounded-circle mb-3">
             {% endif %}
         </div>
         <h2 class="mb-1">{{ request.user }}</h2>

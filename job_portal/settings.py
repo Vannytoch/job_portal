@@ -133,6 +133,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = 'static/'
 
 import os
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
