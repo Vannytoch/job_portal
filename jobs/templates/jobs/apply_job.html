@@ -1,0 +1,91 @@
+{% extends 'jobs/layout.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Home - My Site{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-lg border text-light rounded-lg overflow-hidden" style="background-color: rgba(255, 255, 255, 0);">
+          <!-- Card Header with Gradient Background -->
+          <div class="card-header bg-gradient-primary py-4">
+            <h2 class="mb-0 text-center text-white">Apply for "{{ job.title }}"</h2>
+          </div>
+          
+          <!-- Card Body -->
+          <div class="card-body p-5">
+            <!-- Job Info Section -->
+            <div class="mb-5 p-4 rounded">
+              <h4 class="mb-3 text-primary">Job Details</h4>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <p class="mb-2"><strong><i class="fas fa-building me-2"></i>Company:</strong></p>
+                  <p class="text-light">{{ job.company }}</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <p class="mb-2"><strong><i class="fas fa-map-marker-alt me-2"></i>Location:</strong></p>
+                  <p class="text-light">{{ job.location }}</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <p class="mb-2"><strong><i class="fas fa-dollar-sign me-2"></i>Salary:</strong></p>
+                  <p class="text-light">
+                    {% if job.salary_min and job.salary_max %}
+                      ${{ job.salary_min|floatformat:0 }} - ${{ job.salary_max|floatformat:0 }}
+                    {% else %}
+                      Negotiable
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+              <div class="mb-3">
+                <p class="mb-2"><strong><i class="fas fa-align-left me-2"></i>Description:</strong></p>
+                <div class="text-light">{{ job.description|linebreaks }}</div>
+              </div>
+            </div>
+
+            <!-- Application Form Section -->
+            <div class="p-4 glass rounded border">
+              <h4 class="mb-4 text-primary">Your Application</h4>
+              
+              <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="mb-4">
+                  <label for="id_resume" class="form-label fw-bold">Upload Resume (PDF/DOC)</label>
+                  <div class="file-upload-wrapper">
+                    {{ form.resume|add_class:"form-control" }}
+                    <small class="form-text text-muted">Max file size: 5MB</small>
+                  </div>
+                </div>
+
+                <!-- Additional Fields (example) -->
+                <div class="mb-4">
+                  <label for="id_cover_letter" class="form-label fw-bold">Cover Letter (Optional)</label>
+                  <textarea class="form-control" id="id_cover_letter" name="cover_letter" rows="4" placeholder="Tell us why you're a good fit for this position..." style="background-color: rgba(240, 248, 255, 0);"></textarea>
+                </div>
+
+                <div class="d-grid mt-5">
+                  <button type="submit" class="btn btn-info text-warning btn-lg py-3">
+                    <i class="fas fa-paper-plane me-2"></i> Submit Application
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <!-- Card Footer -->
+          <div class="card-footer py-3 text-center">
+            <p class="mb-0 text-light">We'll contact you within 3 business days after reviewing your application.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

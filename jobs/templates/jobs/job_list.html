@@ -1,0 +1,90 @@
+{% extends 'jobs/layout.html' %}
+{% load static %}
+{% block content %}
+<section class="hero-section text-center">
+  <div class="container">
+    <h1 class="display-4">Find Your Dream Job</h1>
+    <p class="lead">Search thousands of jobs from leading companies and find the perfect role for you.</p>
+    <form class="d-flex justify-content-center mt-4">
+      <div class="input-group" style="max-width: 600px;">
+        <input type="text" class="form-control" placeholder="Search for job title or keyword">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+</section>
+<!-- Featured Jobs -->
+<section class="py-5 ">
+  <div class="container">
+    <h2 class="mb-4 text-center">Featured Jobs</h2>
+    <div class="row g-4">
+      {% for job in jobs %}
+      <div class="col-md-6 col-lg-4">
+        <div class="job-listing p-4 mb-4 glass" style="border: 1px solid white; border-radius: 10px;">
+          <h5 class="card-title">{{ job.title }}</h5>
+          <p class="card-text">{{ job.location }}</p>
+          <p class="card-text">Salary: ${{ job.salary_min|floatformat:0 }}–${{ job.salary_max|floatformat:0 }} •
+            Full Time</p>
+          <a href="{% url 'apply_job' job.id %}" class="btn btn-outline-primary">Apply Now</a>
+        </div>
+      </div>
+      {% endfor %}
+      <!-- Add more job cards -->
+    </div>
+  </div>
+</section>
+
+<div class="d-flex justify-content-center mt-4">
+  <nav>
+    <ul class="pagination glass">
+      <li class="page-item {% if not jobs.has_previous %}disabled{% endif %} glass">
+        <a class="page-link glass"
+          href="{% if jobs.has_previous %}?page={{ jobs.previous_page_number }}{% else %}#{% endif %}">Previous</a>
+      </li>
+
+      <!-- All page numbers -->
+      {% for num in jobs.paginator.page_range %}
+
+      <li class="page-item glass">
+        <a class="page-link glass {% if jobs.number == num %} active {% endif %}" href="?page={{ num }}">{{ num }}</a>
+      </li>
+
+      {% endfor %}
+
+      <!-- Next button -->
+      <li class="page-item {% if not jobs.has_next %}disabled{% endif %} glass">
+        <a class="page-link glass"
+          href="{% if jobs.has_next %}?page={{ jobs.next_page_number }}{% else %}#{% endif %}">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<!-- How It Works -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4 text-center">How It Works</h2>
+    <div class="row text-center g-4">
+      <div class="col-md-4">
+        <div class="p-4 shadow-sm rounded">
+          <h5>1. Search a Job</h5>
+          <p>Filter jobs by keyword and location to match your skills.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 shadow-sm rounded">
+          <h5>2. Apply Easily</h5>
+          <p>Submit your application with just a few clicks.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-4 shadow-sm rounded">
+          <h5>3. Get Hired</h5>
+          <p>Start your new career with the right company.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

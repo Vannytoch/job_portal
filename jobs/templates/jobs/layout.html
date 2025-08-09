@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Home - My Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.bundle.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style_home_page.css' %}">
+
+</head>
+
+<body>
+    <section class="bg-section">
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+        <span class="span_custom"></span>
+    </section>
+    <div class="body">
+        {% if messages %}
+        <div id="alert-container" style="
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1055;
+    min-width: 300px;
+  ">
+
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const alerts = document.querySelectorAll('#alert-container .alert');
+                alerts.forEach(function (alert) {
+                    setTimeout(() => {
+                        const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                        bsAlert.close();
+                    }, 4000);
+                });
+            });
+        </script>
+        {% endif %}
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light text-light shadow-sm sticky-top glass">
+            <div class="container ">
+                <a class="navbar-brand text-light fw-bold" href="/">JobFinder</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navMenu">
+                    <ul class="navbar-nav text-light ms-auto">
+                        <li class="nav-item"><a class="text-light nav-link" href="/">Home</a></li>
+                        <li class="nav-item"><a class="text-light nav-link" href="/job_list">Jobs</a></li>
+                        <li class="nav-item"><a class="text-light nav-link" href="#">Blog</a></li>
+                        <li class="nav-item"><a class="text-light nav-link" href="#">Contact</a></li>
+                        {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="userDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{% url 'profile' %}">View Profile</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link text-light" href="{% url 'login' %}">Login</a></li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% block content %}
+        {% endblock %}
+
+
+        <!-- Footer -->
+        <footer class="glass text-white text-center py-4">
+            <div class="container">
+                <p class="mb-0" style=" text-shadow: 1px 1px green, 2px 2px blue;">© 2025 JobFinder. Based on a design
+                    by Colorlib.</p>
+            </div>
+        </footer>
+
+    </div>
+    {% block modal %}
+    {% endblock %}
+    <script>
+        // Wait for the DOM to fully load
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select all alert elements inside the alert container
+            const alerts = document.querySelectorAll('#alert-container .alert');
+
+            alerts.forEach(function (alert) {
+                // Set timeout to auto close after 3 seconds (4000 ms)
+                setTimeout(() => {
+                    // Bootstrap 5 alert dismissal using the Alert class
+                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
+                    bsAlert.close();
+                }, 3000);
+            });
+        });
+    </script>
+    <script src="{% static 'css/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>
