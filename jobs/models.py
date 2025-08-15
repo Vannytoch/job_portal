@@ -7,7 +7,7 @@ class Job(models.Model):
     description = models.TextField()
     company = models.CharField(max_length=255)
     location = models.CharField(max_length=100)
-    posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posted_by')
     posted_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     salary_min = models.FloatField(default=0)
@@ -17,6 +17,6 @@ class Job(models.Model):
 
 class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='applications')
     resume = models.FileField(upload_to='resumes/')
     applied_at = models.DateTimeField(auto_now_add=True)

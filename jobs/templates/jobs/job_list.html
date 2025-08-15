@@ -5,12 +5,7 @@
   <div class="container">
     <h1 class="display-4">Find Your Dream Job</h1>
     <p class="lead">Search thousands of jobs from leading companies and find the perfect role for you.</p>
-    <form class="d-flex justify-content-center mt-4">
-      <div class="input-group" style="max-width: 600px;">
-        <input type="text" class="form-control" placeholder="Search for job title or keyword">
-        <button class="btn btn-primary" type="submit">Search</button>
-      </div>
-    </form>
+    {% include 'jobs/items/search_box.html' %}
   </div>
 </section>
 <!-- Featured Jobs -->
@@ -19,6 +14,7 @@
     <h2 class="mb-4 text-center">Featured Jobs</h2>
     <div class="row g-4">
       {% for job in jobs %}
+      {% if job.is_active %}
       <div class="col-md-6 col-lg-4">
         <div class="job-listing p-4 mb-4 glass" style="border: 1px solid white; border-radius: 10px;">
           <h5 class="card-title">{{ job.title }}</h5>
@@ -28,6 +24,7 @@
           <a href="{% url 'apply_job' job.id %}" class="btn btn-outline-primary">Apply Now</a>
         </div>
       </div>
+      {% endif %}
       {% endfor %}
       <!-- Add more job cards -->
     </div>

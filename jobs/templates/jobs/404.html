@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Lost in Space</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a55eea;
+            --bg: #f0f4ff;
+        }
+        
+        body {
+            background: var(--bg);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2d3436;
+        }
+        
+        .float-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .float-item {
+            position: absolute;
+            animation: float linear infinite;
+            user-select: none;
+            pointer-events: none;
+        }
+        
+        .emoji {
+            font-size: 2rem;
+            animation-duration: 20s;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+        }
+        
+        .bubble {
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            animation-duration: 25s;
+        }
+        
+        .error-card {
+            max-width: 500px;
+            text-align: center;
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+        
+        .error-code {
+            font-size: 6rem;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .btn-home {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+            margin-top: 1rem;
+        }
+        
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.4);
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: 
+                    translate(calc(var(--move-x) * 100vw), 
+                    calc(var(--move-y) * 100vh))
+                    rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .error-card {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            .error-code {
+                font-size: 4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="float-container" id="floatElements"></div>
+    
+    <div class="error-card">
+        <h1 class="error-code">404</h1>
+        <h2>Oops! You're floating in space</h2>
+        <p>Don't worry, these friendly emojis will keep you company</p>
+        <button class="btn-home" onclick="window.location.href='/'">
+            Beam Me Home
+        </button>
+    </div>
+
+    <script>
+        // Configuration
+        const config = {
+            emojis: ['🚀', '🌍', '👽', '🛸', '⭐', '🌌', '☄️', '👾'],
+            totalEmojis: 12,
+            totalBubbles: 15,
+            maxBubbleSize: 80
+        };
+        
+        // Create floating elements
+        function createFloaters() {
+            const container = document.getElementById('floatElements');
+            
+            // Create emojis
+            for (let i = 0; i < config.totalEmojis; i++) {
+                const emoji = document.createElement('div');
+                emoji.className = 'float-item emoji';
+                emoji.textContent = config.emojis[
+                    Math.floor(Math.random() * config.emojis.length)
+                ];
+                
+                setFloatingProperties(emoji, true);
+                container.appendChild(emoji);
+            }
+            
+            // Create bubbles
+            for (let i = 0; i < config.totalBubbles; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'float-item bubble';
+                
+                const size = Math.random() * config.maxBubbleSize + 20;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                setFloatingProperties(bubble, false);
+                container.appendChild(bubble);
+            }
+        }
+        
+        // Set random floating properties
+        function setFloatingProperties(element, isEmoji) {
+            // Random starting position (20-80% to keep near center)
+            const startX = 0.2 + Math.random() * 0.6;
+            const startY = 0.2 + Math.random() * 0.6;
+            
+            // Random movement direction (-0.5 to 0.5)
+            const moveX = (Math.random() - 0.5) * 2;
+            const moveY = (Math.random() - 0.5) * 2;
+            
+            // Random animation duration
+            const duration = 15 + Math.random() * 20;
+            
+            // Apply styles
+            element.style.left = `${startX * 100}%`;
+            element.style.top = `${startY * 100}%`;
+            element.style.setProperty('--move-x', moveX);
+            element.style.setProperty('--move-y', moveY);
+            element.style.animationDuration = `${duration}s`;
+            
+            // Random delay
+            element.style.animationDelay = `${Math.random() * 5}s`;
+            
+            // Random size variation for emojis
+            if (isEmoji) {
+                element.style.fontSize = `${1 + Math.random() * 2}rem`;
+            }
+            
+            // Random opacity
+            element.style.opacity = 0.7 + Math.random() * 0.3;
+        }
+        
+        // Initialize when page loads
+        window.addEventListener('load', createFloaters);
+    </script>
+</body>
+</html>

@@ -25,8 +25,9 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('jobs/', include('jobs.urls')),
     path('', include('jobs.urls')),
-    
-   
+
+
 ]
+handler404 = 'jobs.views.custom_404'
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

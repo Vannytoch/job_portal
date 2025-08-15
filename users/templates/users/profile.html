@@ -6,21 +6,22 @@
 
 <div class="container py-5">
     <!-- Profile Header -->
-    <div class="profile-header p-4 mb-4 text-center shadow-sm">
+    <div class="profile-header p-4 mb-4 text-center shadow-sm" style="opacity: 90%;">
         <div class="d-flex justify-content-center">
             {% if request.user.info.image %}
             <img src="{{ request.user.info.image.url }}" alt="Profile Picture" class="profile-img rounded-circle mb-3">
             {% else %}
-            <img src="/media/profile_pics/pixlr-image-generator-example-4_Zu4xlJK.webp" alt="Default Picture" class="profile-img rounded-circle mb-3">
+            <img src="/media/profile_pics/pixlr-image-generator-example-4_Zu4xlJK.webp" alt="Default Picture"
+                class="profile-img rounded-circle mb-3">
             {% endif %}
         </div>
-        <h2 class="mb-1">{{ request.user }}</h2>
+        <h2 class="mb-1">{{ request.user|capfirst }}</h2>
         <p class="mb-2 text-white-50">Web Developer</p>
         <div class="d-flex justify-content-center gap-3">
-            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="social-icon"><i class="fas fa-globe"></i></a>
+            <a href="https://web.facebook.com/vanny.toch.58" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://github.com/Vannytoch" class="social-icon"><i class="fab fa-github"></i></a>
+            <a href="https://t.me/Toch_Vanny" class="social-icon"><i class="fab fa-telegram"></i></a>
+            <a href="https://vannytoch.github.io/Personal-Detail" class="social-icon"><i class="fas fa-globe"></i></a>
         </div>
     </div>
 
@@ -35,7 +36,7 @@
                 <div class="card-body ">
                     <ul class="list-group list-group-flush ">
                         <li class="list-group-item text-light no-bg d-flex justify-content-between no-bg text-light">
-                            <span><i class="fas fa-envelope me-2 text-muted"></i> Email</span>
+                            <span><i class="fas fa-envelope me-2"></i> Email</span><br />
                             <span>{{ request.user.email }}
                                 {% if request.user.is_staff %}
                                 <span class="badge bg-success">Verified</span>
@@ -45,15 +46,15 @@
                             </span>
                         </li>
                         <li class="list-group-item text-light no-bg d-flex justify-content-between">
-                            <span><i class="fas fa-phone me-2 text-muted"></i> Phone</span>
+                            <span><i class="fas fa-phone me-2"></i> Phone</span>
                             <span>{{ request.user.info.phone }}</span>
                         </li>
                         <li class="list-group-item text-light no-bg d-flex justify-content-between">
-                            <span><i class="fas fa-birthday-cake me-2 text-muted"></i> Date of Birth</span>
+                            <span><i class="fas fa-birthday-cake me-2"></i> Date of Birth</span>
                             <span>{{ request.user.info.dob }}</span>
                         </li>
                         <li class="list-group-item text-light no-bg d-flex justify-content-between">
-                            <span><i class="fas fa-map-marker-alt me-2 text-muted"></i> Location</span>
+                            <span><i class="fas fa-map-marker-alt me-2"></i> Location</span>
                             <span>{{ request.user.info.location }}</span>
                         </li>
                     </ul>
@@ -70,19 +71,19 @@
                 <div class="card-body ">
                     <ul class="list-group list-group-flush no-bg">
                         <li class="list-group-item text-light no-bg d-flex justify-content-between no-bg">
-                            <span><i class="fas fa-building me-2 text-muted"></i> Company</span>
+                            <span><i class="fas fa-building me-2"></i> Company</span>
                             <span>{{ request.user.info.company }}</span>
                         </li>
                         <li class="list-group-item text-light no-bg d-flex justify-content-between">
-                            <span><i class="fas fa-user-tie me-2 text-muted"></i> Job Title</span>
+                            <span><i class="fas fa-user-tie me-2"></i> Job Title</span>
                             <span>{{ request.user.info.job_title }}</span>
                         </li>
                         <li class="list-group-item text-light no-bg d-flex justify-content-between">
-                            <span><i class="fas fa-graduation-cap me-2 text-muted"></i> Education</span>
+                            <span><i class="fas fa-graduation-cap me-2"></i> Education</span>
                             <span>{{ request.user.info.education }}</span>
                         </li>
                         <li class="list-group-item text-light no-bg">
-                            <span><i class="fas fa-code me-2 text-muted"></i> Skills</span>
+                            <span><i class="fas fa-code me-2"></i> Skills</span>
                             <div class="mt-2">
                                 <span class="badge bg-primary me-1">JavaScript</span>
                                 <span class="badge bg-primary me-1">React</span>
@@ -94,7 +95,78 @@
                 </div>
             </div>
         </div>
+        {% if request.user.applications.count %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm no-bg text-light border">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-file-signature me-2"></i>Your Apply Jobs</h5>
+                </div>
+                <div class="card-body ">
+                    <ul class="list-group list-group-flush ">
+                        <li
+                            class="list-group-item active text-light no-bg d-flex justify-content-between no-bg text-light">
+                            <span>JOB TITLE</span><br />
+                            <span>DATE</span>
+                        </li>
+                        {% for apply in request.user.applications.all %}
+
+                        <li class="list-group-item text-light no-bg d-flex justify-content-between no-bg text-light">
+                            <span>{{ apply.job.title }}</span><br />
+                            <span>{{ apply.applied_at }}</span>
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if request.user.posted_by.count %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm no-bg text-light border">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Your Posted Jobs</h5>
+                </div>
+                <div class="card-body ">
+                    <ul class="list-group list-group-flush ">
+                        <li
+                            class="list-group-item active text-light no-bg d-flex justify-content-between no-bg text-light">
+                            <span> JOB TITLE</span><br />
+                            <span>DATE</span>
+                        </li>
+                        {% for post_job in request.user.posted_by.all %}
+                        <li class="list-group-item text-light no-bg d-flex justify-content-between no-bg text-light">
+                            <!-- Trigger modal -->
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#editProfileModal{{ post_job.id }}"
+                                class="text-decoration-none text-light">
+                                {% if post_job.is_active%}
+                                <i class="fa fa-check-circle me-2 text-light"></i> {{ post_job.title }}
+                                {% else %}
+                                <i class="fa fa-times-circle me-2 text-danger"></i> {{ post_job.title }}
+                                {% endif %}
+                            </a>
+                            <span>{{ post_job.posted_at|date:"Y-m-d H:i" }}</span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item text-light no-bg d-flex justify-content-between no-bg text-light">
+                           <!-- Trigger modal -->
+                           <a href="#" data-bs-toggle="modal" data-bs-target="#addJobModal"
+                               class="text-decoration-none">
+                              <i class="fas fa-plus me-2"></i> Add New Job
+                           </a>
+                           <span>{{ post_job.posted_at|date:"Y-m-d H:i" }}</span>
+                       </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
     </div>
+
+
 
     <!-- Bio Section -->
     <div class="mb-4 shadow-sm">
@@ -113,7 +185,7 @@
             data-bs-target="#editProfileModal">
             <i class="fas fa-edit me-1"></i> Edit Profile
         </a>
-        <button class="btn btn-outline-secondary"><i class="fas fa-download me-1"></i> Reset Password </button>
+        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#resetPasswordModal"><i class="fas fa-key me-2"></i> Reset Password </button>
     </div>
 </div>
 {% endblock %}
@@ -134,7 +206,10 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12 mb-3 justify-content-center d-flex flex-column">
-                            <div class="mx-auto">
+                            <label for="profile_image" class="form-label">Profile Picture</label>
+                            <input class="form-control" hidden type="file" id="profile_image" name="profile_image"
+                                accept="image/*" onchange="previewImage(event)">
+                            <div class="mx-auto" style="position: relative;">
                                 {% if request.user.info.image %}
                                 <img id="profileImagePreview" src="{{ request.user.info.image.url }}"
                                     alt="Profile Picture Preview" class="img-thumbnail mt-1" style="max-height: 150px;">
@@ -142,10 +217,17 @@
                                 <img id="profileImagePreview" src="" alt="Profile Picture Preview"
                                     class="img-thumbnail mt-1" style="max-height: 150px; display:none;">
                                 {% endif %}
+                                <button type="button"  style=" position: absolute;
+                                    bottom: 4px;
+                                    right: 8px;
+                                    background: none;
+                                    border: none;
+                                    cursor: pointer;
+                                    color: lightgrey;"
+                                     onclick="document.getElementById('profile_image').click()">
+                                    <i class="fa fa-camera" aria-hidden="true"></i>
+                                </button>
                             </div>
-                            <label for="profile_image" class="form-label">Profile Picture</label>
-                            <input class="form-control" type="file" id="profile_image" name="profile_image"
-                                accept="image/*" onchange="previewImage(event)">
 
                             <small class="form-text text-muted mt-1">Current image:</small>
                         </div>
@@ -218,5 +300,159 @@
         </div>
     </div>
 </div>
+
+{% if request.user.posted_by.count %}
+{% for post_job in request.user.posted_by.all %}
+<div class="modal fade" id="editProfileModal{{ post_job.id }}" tabindex="-1"
+    aria-labelledby="editProfileLabel{{ post_job.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-light p-4">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileLabel">Edit Job</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{% url 'edit_job' post_job.id %}">
+                {% csrf_token %}
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label for="title_{{ post_job.id }}" class="form-label">Job Title</label>
+                        <input type="text" class="form-control" id="title_{{ post_job.id }}" name="title"
+                            value="{{ post_job.title }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="company_{{ post_job.id }}" class="form-label">Company</label>
+                        <input type="text" class="form-control" id="company_{{ post_job.id }}" name="company"
+                            value="{{ post_job.company }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="location_{{ post_job.id }}" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location_{{ post_job.id }}" name="location"
+                            value="{{ post_job.location }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="salary_min_{{ post_job.id }}" class="form-label">Minimum Salary</label>
+                        <input type="number" class="form-control" id="salary_min_{{ post_job.id }}" name="salary_min"
+                            value="{{ post_job.salary_min }}">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="salary_max_{{ post_job.id }}" class="form-label">Maximum Salary</label>
+                        <input type="number" class="form-control" id="salary_max_{{ post_job.id }}" name="salary_max"
+                            value="{{ post_job.salary_max }}">
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="description_{{ post_job.id }}" class="form-label">Description</label>
+                        <textarea class="form-control" id="description_{{ post_job.id }}" name="description"
+                            rows="3">{{ post_job.description }}</textarea>
+                    </div>
+
+                    <div class="col-12 mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="is_active_{{ post_job.id }}"
+                            name="is_active" {%if post_job.is_active %}checked{% endif %}>
+                        <label class="form-check-label" for="is_active_{{ post_job.id }}">Active</label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+<div class="modal fade" id="addJobModal" tabindex="-1" aria-labelledby="addJobLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-dark text-light p-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addJobLabel">Add New Job</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{% url 'add_job' %}">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="title" class="form-label">Job Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="company" class="form-label">Company</label>
+            <input type="text" class="form-control" id="company" name="company" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="salary_min" class="form-label">Minimum Salary</label>
+            <input type="number" class="form-control" id="salary_min" name="salary_min" min="0" step="0.01">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="salary_max" class="form-label">Maximum Salary</label>
+            <input type="number" class="form-control" id="salary_max" name="salary_max" min="0" step="0.01">
+          </div>
+          <div class="col-12 mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+          </div>
+          <div class="col-12 mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="is_active" name="is_active" checked>
+            <label class="form-check-label" for="is_active">Active</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Job</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- Reset Password Modal -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-light p-4">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resetPasswordLabel">Reset Password</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="{% url 'reset_password_on_profile' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="current_password" class="form-label">Current Password</label>
+          <input type="password" class="form-control" id="current_password" name="current_password" required>
+        </div>
+        <div class="mb-3">
+          <label for="new_password" class="form-label">New Password</label>
+          <input type="password" class="form-control" id="new_password" name="new_password" required>
+        </div>
+        <div class="mb-3">
+          <label for="confirm_password" class="form-label">Confirm New Password</label>
+          <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+        </div>
+        <div class="modal-footer px-0">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Change Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
 {% endblock %}

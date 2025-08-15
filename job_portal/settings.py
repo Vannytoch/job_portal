@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-+qdqvu&e8f1ficeh3egacqrbmqwf+ljh1znrm_ekh++q5int*3'
 
 # DEBUG from env (string): on Render set DEBUG = False
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.18']
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1', '10.12.5.227', ]
 
 
 # Application definition
@@ -47,6 +47,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # add WhiteNoise here
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'jobs.middleware.Custom404Middleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -125,15 +126,15 @@ USE_I18N = True
 USE_TZ = True
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'  # or os.path.join(BASE_DIR, 'media')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # for collectstatic to gather files here
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
@@ -141,3 +142,4 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+

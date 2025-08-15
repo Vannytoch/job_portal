@@ -1,0 +1,54 @@
+<form class="d-flex justify-content-center flex-wrap mt-4">
+            
+            <div class="input-group w-50 mx-5" >
+                <input type="text" id="jobSearch" class="form-control" placeholder="Search for jobs..." autocomplete="off">
+
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+            <div class="position-relative w-50 mx-auto" >
+                <ul class="list-group position-absolute w-100 shadow glass" id="searchResults" style="z-index: 1000; display: none ;">
+                    
+                </ul>
+            </div>
+
+        </form>
+
+<script>
+    const searchBox = document.getElementById('jobSearch');
+    const resultsBox = document.getElementById('searchResults');
+
+    searchBox.addEventListener('input', function () {
+        const query = this.value.trim();
+
+        if (query.length > 0) {
+            fetch(`/search-jobs/?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsBox.innerHTML = "";
+                    if (data.length > 0) {
+                        data.forEach(item => {
+                            const li = document.createElement('li');
+                            li.className = "list-group-item list-group-item-action text-start";
+                            li.textContent = item.title;
+                            li.onclick = () => {
+                                window.location.href = `/apply/${item.id}/`;
+                            };
+                            resultsBox.appendChild(li);
+                        });
+                        resultsBox.style.display = "block";
+                    } else {
+                        resultsBox.style.display = "none";
+                    }
+                });
+        } else {
+            resultsBox.style.display = "none";
+        }
+    });
+
+    // Hide dropdown when input loses focus
+    searchBox.addEventListener('blur', () => {
+        setTimeout(() => {
+            resultsBox.style.display = "none";
+        }, 200); // delay so a click on a list item still works
+    });
+</script>

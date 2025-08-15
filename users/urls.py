@@ -10,4 +10,6 @@ urlpatterns = [
     path('reset-password/', views.reset_password, name='reset_password'),    
     path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('verify-registration-otp/', views.verify_registration_otp, name='verify_registration_otp'),
+    path('edit-job/<int:job_id>/', views.edit_job, name='edit_job'),
+    path('reset-password-profile/', views.reset_password_on_profile, name='reset_password_on_profile'),
 ]

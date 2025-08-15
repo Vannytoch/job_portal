@@ -1,14 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomUserForm, CustomLoginForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout, update_session_auth_hash
+from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
-from .models import UserInfo, PasswordResetOTP,CustomUser
+from .models import UserInfo, PasswordResetOTP, CustomUser
+from jobs.models import Job
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 import random
 from django.contrib import messages
 
-from django.contrib import messages
 # ... your existing imports ...
 
 def register(request):
@@ -110,7 +112,6 @@ def edit_profile(request):
     if request.method == 'POST':
         info = request.user.info
         info.phone = request.POST.get('phone', info.phone)
-        info.dob = request.POST.get('dob', info.dob)
         info.location = request.POST.get('location', info.location)
         info.company = request.POST.get('company', info.company)
         info.job_title = request.POST.get('job_title', info.job_title)
@@ -118,12 +119,42 @@ def edit_profile(request):
         info.description = request.POST.get('description', info.description)
 
         profile_image = request.FILES.get('profile_image')
+        if request.POST.get('dob'):
+            print(request.POST.get('dob'))
+            info.dob = request.POST.get('dob')
+        else:
+            info.dob = None 
+            
         if profile_image:
             info.image = profile_image
 
         info.save()
         messages.success(request, 'Profile updated successfully.')
         return redirect('profile')
+    return redirect('profile')
+
+@login_required
+def edit_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id, posted_by=request.user)
+
+    if request.method == "POST":
+        job.title = request.POST.get('title')
+        job.description = request.POST.get('description')
+        job.company = request.POST.get('company')
+        job.location = request.POST.get('location')
+        job.is_active = 'is_active' in request.POST
+
+        try:
+            job.salary_min = float(request.POST.get('salary_min') or 0)
+            job.salary_max = float(request.POST.get('salary_max') or 0)
+            job.save()
+            messages.success(request, "Job updated successfully.")
+        except ValueError:
+            messages.error(request, "Please enter valid numeric values for salary.")
+            return redirect('profile')
+
+        return redirect('profile')
+
     return redirect('profile')
 
 def logout_view(request):
@@ -221,3 +252,30 @@ def reset_password(request):
     return render(request, 'users/login.html', {
         'open_modal': 'resetPasswordModal',
     })
+
+@login_required
+def reset_password_on_profile(request):
+    if request.method == "POST":
+        current = request.POST.get('current_password')
+        new = request.POST.get('new_password')
+        confirm = request.POST.get('confirm_password')
+        user = request.user
+
+        if not user.check_password(current):
+            messages.error(request, "Current password is incorrect.")
+        elif new != confirm:
+            messages.error(request, "New passwords do not match.")
+        else:
+            try:
+                validate_password(new, user)
+            except ValidationError as e:
+                for error in e.messages:
+                    messages.error(request, error)
+            else:
+                user.set_password(new)
+                user.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, "Password successfully changed.")
+                return redirect('profile')
+
+    return redirect('profile')
